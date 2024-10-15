@@ -1,182 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turtle Banana Game - مهند مافي منو 2</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        canvas {
-            display: block;
-        }
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .button {
-            width: 60px;
-            height: 60px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-    </style>
+    <title>سلحفاة تأكل الموز</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<script>
-    // Configuration for the game
-    const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        backgroundColor: '#87CEEB',  // Sky blue to represent beach
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 0 }
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-    };
-
-    // Create the game
-    const game = new Phaser.Game(config);
-
-    let turtle;
-    let bananas;
-    let score = 0;
-    let scoreText;
-    let speed = 100;
-
-    function preload() {
-        // Load assets
-        this.load.image('turtle', 'https://example.com/turtle.png');  // Replace with turtle image URL
-        this.load.image('banana', 'https://example.com/banana.png');  // Replace with banana image URL
-        this.load.image('background', 'https://example.com/beach_background.jpg');  // Replace with background image URL
-    }
-
-    function create() {
-        // Add background
-        this.add.image(400, 300, 'background').setDisplaySize(800, 600);
-
-        // Add turtle
-        turtle = this.physics.add.sprite(400, 300, 'turtle').setScale(0.5);
-        turtle.setCollideWorldBounds(true);
-
-        // Add bananas
-        bananas = this.physics.add.group({
-            key: 'banana',
-            repeat: 5,
-            setXY: { x: 12, y: 12, stepX: 150 }
-        });
-
-        bananas.children.iterate(function (banana) {
-            banana.setScale(0.3);
-            banana.setBounce(1);
-        });
-
-        // Score text
-        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
-        
-        // Collision detection between turtle and bananas
-        this.physics.add.overlap(turtle, bananas, collectBanana, null, this);
-
-        // Add game title
-        this.add.text(400, 550, 'مهند مافي منو 2', { fontSize: '24px', fill: '#FFF' }).setOrigin(0.5);
-
-        // Add control buttons
-        createControls(this);
-    }
-
-    function update() {
-        // Keyboard control
-        const cursors = this.input.keyboard.createCursorKeys();
-        
-        if (cursors.left.isDown) {
-            turtle.setVelocityX(-speed);
-        } else if (cursors.right.isDown) {
-            turtle.setVelocityX(speed);
-        } else {
-            turtle.setVelocityX(0);
-        }
-
-        if (cursors.up.isDown) {
-            turtle.setVelocityY(-speed);
-        } else if (cursors.down.isDown) {
-            turtle.setVelocityY(speed);
-        } else {
-            turtle.setVelocityY(0);
-        }
-    }
-
-    function collectBanana(turtle, banana) {
-        banana.disableBody(true, true);
-
-        // Increase score and speed
-        score += 10;
-        speed += 10;
-        scoreText.setText('Score: ' + score);
-
-        // Add more bananas
-        if (bananas.countActive(true) === 0) {
-            bananas.children.iterate(function (banana) {
-                banana.enableBody(true, banana.x, banana.y, true, true);
-            });
-        }
-    }
-
-    // Create control buttons
-    function createControls(scene) {
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'controls';
-
-        // Create buttons
-        const upButton = createButton('↑', () => moveTurtle(0, -speed));
-        const downButton = createButton('↓', () => moveTurtle(0, speed));
-        const leftButton = createButton('←', () => moveTurtle(-speed, 0));
-        const rightButton = createButton('→', () => moveTurtle(speed, 0));
-
-        // Add buttons to control div
-        controlsDiv.appendChild(leftButton);
-        controlsDiv.appendChild(upButton);
-        controlsDiv.appendChild(downButton);
-        controlsDiv.appendChild(rightButton);
-
-        document.body.appendChild(controlsDiv);
-    }
-
-    function createButton(text, onClick) {
-        const button = document.createElement('button');
-        button.className = 'button';
-        button.innerText = text;
-        button.onclick = onClick;
-        return button;
-    }
-
-    function moveTurtle(x, y) {
-        turtle.setVelocityX(x);
-        turtle.setVelocityY(y);
-    }
-</script>
-
+    <h1>سلحفاة تأكل الموز</h1>
+    <div id="gameArea"></div>
+    <p>النقاط: <span id="score">0</span></p>
+    <div class="controls">
+        <button id="up">↑</button>
+        <button id="left">←</button>
+        <button id="down">↓</button>
+        <button id="right">→</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
