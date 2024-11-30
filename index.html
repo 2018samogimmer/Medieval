@@ -77,12 +77,6 @@
             text-align: left;
         }
 
-        .comments-section img {
-            display: block;
-            margin: 0 auto 20px auto;
-            width: 100px;
-        }
-
         .comment-box {
             width: 100%;
             padding: 10px;
@@ -112,6 +106,8 @@
             background-color: #45a049;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
 </head>
 <body>
     <img src="https://i.ibb.co/GQgZDBd/Vitamin-C-Logo.png" alt="شعار فيتامين سي" class="logo">
@@ -140,38 +136,38 @@
     </div>
     <footer>© 2024 جميع الحقوق محفوظة - فيتامين سي</footer>
     <script>
-        // استرجاع التعليقات المحفوظة عند تحميل الصفحة
-        window.onload = function() {
-            const commentsContainer = document.getElementById("commentsContainer");
-            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-            savedComments.forEach(comment => {
-                const commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.textContent = comment;
-                commentsContainer.appendChild(commentDiv);
-            });
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIk1H8NLyCsBYXiz26EyapD8U7Ao6PCl8",
+            authDomain: "vitamin-c-5c074.firebaseapp.com",
+            databaseURL: "https://vitamin-c-5c074-default-rtdb.firebaseio.com",
+            projectId: "vitamin-c-5c074",
+            storageBucket: "vitamin-c-5c074.appspot.com",
+            messagingSenderId: "315684932125",
+            appId: "1:315684932125:web:11200e8aa4fdf24bb094f4",
+            measurementId: "G-DV7YEDXE2M"
         };
 
+        // تهيئة Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // تحميل التعليقات عند فتح الصفحة
+        const commentsContainer = document.getElementById("commentsContainer");
+        firebase.database().ref("comments").on("child_added", function(snapshot) {
+            const comment = snapshot.val();
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "comment";
+            commentDiv.textContent = comment.text;
+            commentsContainer.appendChild(commentDiv);
+        });
+
+        // إضافة تعليق جديد
         function addComment() {
             const commentInput = document.getElementById("commentInput");
-            const commentsContainer = document.getElementById("commentsContainer");
-
             if (commentInput.value.trim() !== "") {
-                // إنشاء عنصر جديد للتعليق
-                const commentDiv = document.createElement("div");
-                commentDiv.className = "comment";
-                commentDiv.textContent = commentInput.value;
-
-                // إضافة التعليق إلى القسم
-                commentsContainer.appendChild(commentDiv);
-
-                // حفظ التعليق في LocalStorage
-                const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-                savedComments.push(commentInput.value);
-                localStorage.setItem("comments", JSON.stringify(savedComments));
-
-                // مسح النص من خانة الإدخال
-                commentInput.value = "";
+                firebase.database().ref("comments").push({ text: commentInput.value });
+                commentInput.value = ""; // تفريغ خانة الإدخال
             } else {
                 alert("يرجى كتابة تعليق قبل الإرسال!");
             }
