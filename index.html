@@ -20,6 +20,11 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
 
+        .logo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -63,32 +68,54 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Animation */
-        @keyframes floating {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        .comments-section {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            margin-top: 20px;
+            border-top: 2px solid #ffa726;
+            text-align: left;
         }
 
-        .graphic {
-            margin: 20px 0;
-            animation: floating 3s infinite ease-in-out;
+        .comments-section img {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 100px;
         }
 
-        .graphic img {
-            width: 200px;
+        .comment-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .comment {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <img src="https://i.ibb.co/GQgZDBd/Vitamin-C-Logo.png" alt="شعار فيتامين سي" class="logo">
     <h1>مواقع فيتامين سي</h1>
-    <div class="graphic">
-        <img src="https://i.ibb.co/GQgZDBd/Vitamin-C-Logo.png" alt="شعار فيتامين سي">
-    </div>
     <div class="container">
         <a href="https://maps.app.goo.gl/vWqWYrLpVBhag8Dk6" class="button">
             <span>فيتامين سي العزيزه</span>
@@ -103,6 +130,35 @@
             <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Map Icon">
         </a>
     </div>
+    <div class="comments-section">
+        <h2>التعليقات والشكاوى</h2>
+        <textarea id="commentInput" class="comment-box" placeholder="اكتب تعليقك هنا..."></textarea>
+        <button class="submit-button" onclick="addComment()">إرسال</button>
+        <div id="commentsContainer">
+            <!-- التعليقات ستظهر هنا -->
+        </div>
+    </div>
     <footer>© 2024 جميع الحقوق محفوظة - فيتامين سي</footer>
+    <script>
+        function addComment() {
+            const commentInput = document.getElementById("commentInput");
+            const commentsContainer = document.getElementById("commentsContainer");
+
+            if (commentInput.value.trim() !== "") {
+                // إنشاء عنصر جديد للتعليق
+                const commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.textContent = commentInput.value;
+
+                // إضافة التعليق إلى القسم
+                commentsContainer.appendChild(commentDiv);
+
+                // مسح النص من خانة الإدخال
+                commentInput.value = "";
+            } else {
+                alert("يرجى كتابة تعليق قبل الإرسال!");
+            }
+        }
+    </script>
 </body>
 </html>
