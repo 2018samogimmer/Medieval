@@ -22,7 +22,7 @@
 
         .logo {
             margin-top: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .container {
@@ -140,6 +140,18 @@
     </div>
     <footer>© 2024 جميع الحقوق محفوظة - فيتامين سي</footer>
     <script>
+        // استرجاع التعليقات المحفوظة عند تحميل الصفحة
+        window.onload = function() {
+            const commentsContainer = document.getElementById("commentsContainer");
+            const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+            savedComments.forEach(comment => {
+                const commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.textContent = comment;
+                commentsContainer.appendChild(commentDiv);
+            });
+        };
+
         function addComment() {
             const commentInput = document.getElementById("commentInput");
             const commentsContainer = document.getElementById("commentsContainer");
@@ -152,6 +164,11 @@
 
                 // إضافة التعليق إلى القسم
                 commentsContainer.appendChild(commentDiv);
+
+                // حفظ التعليق في LocalStorage
+                const savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+                savedComments.push(commentInput.value);
+                localStorage.setItem("comments", JSON.stringify(savedComments));
 
                 // مسح النص من خانة الإدخال
                 commentInput.value = "";
